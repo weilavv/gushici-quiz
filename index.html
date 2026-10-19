@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>上海小学古诗文大会 · 历年题库在线练</title>
+<style>
+:root{
+  --ink:#22303c; --ink2:#4a5a6a; --paper:#f7f4ec; --card:#fffdf8;
+  --line:#e3dccb; --gold:#a9803c; --gold2:#c9a45c; --red:#b3442f;
+  --green:#2f7d5b; --blue:#2f5f8f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","WenQuanYi Micro Hei",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;padding-bottom:60px}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+header.top{background:linear-gradient(160deg,#8d6a32,#5f4820);color:#fdf8ee;padding:26px 20px 22px;
+  border-bottom:4px solid var(--gold2);box-shadow:0 3px 14px rgba(0,0,0,.12)}
+header.top h1{margin:0;font-size:22px;letter-spacing:1px}
+header.top p{margin:8px 0 0;font-size:13px;opacity:.9}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.stat{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:6px 12px;font-size:12px}
+.stat b{font-size:16px;margin-right:4px}
+nav.tabs{position:sticky;top:0;z-index:20;background:rgba(247,244,236,.96);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);display:flex;gap:6px;padding:10px 12px;overflow-x:auto}
+nav.tabs button{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--ink2);
+  border-radius:999px;padding:7px 15px;font-size:13px;cursor:pointer}
+nav.tabs button.on{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:600}
+.page{display:none;padding-top:18px}
+.page.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;
+  box-shadow:0 2px 10px rgba(90,70,30,.06)}
+.card h2{margin:0 0 6px;font-size:18px}
+.card .sub{font-size:12px;color:#8a7a5f;margin-bottom:12px}
+.tag{display:inline-block;font-size:11px;background:#f0e8d6;color:#7a5a22;border-radius:6px;padding:2px 8px;margin:0 4px 4px 0}
+.btn{display:inline-block;text-align:center;border:none;border-radius:10px;padding:11px 20px;font-size:15px;cursor:pointer;
+  background:var(--gold);color:#fff;font-family:inherit}
+.btn.ghost{background:#fff;color:var(--gold);border:1px solid var(--gold)}
+.btn.sm{padding:7px 14px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input[type=text],input[type=number],select{border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:14px;
+  font-family:inherit;background:#fff;color:var(--ink)}
+input[type=number]{width:80px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font-size:13px;cursor:pointer;color:var(--ink2)}
+.chip.on{background:#eef3e8;border-color:var(--green);color:var(--green);font-weight:600}
+#qno{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px}
+.stem{font-size:18px;margin:6px 0 16px;line-height:1.9}
+.opt{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:9px 0;cursor:pointer;background:#fff;
+  display:flex;gap:11px;align-items:flex-start;transition:.15s}
+.opt:hover{border-color:var(--gold2);background:#fdf8ee}
+.opt.sel{border-color:var(--gold);background:#fdf3e2;box-shadow:inset 0 0 0 1px var(--gold)}
+.opt.right{border-color:var(--green);background:#eef8f2}
+.opt.wrong{border-color:var(--red);background:#fdeeea}
+.opt .lk{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);flex:none;text-align:center;
+  line-height:23px;font-size:13px;color:var(--ink2);background:#faf7f0}
+.opt.sel .lk{background:var(--gold);color:#fff;border-color:var(--gold)}
+.opt.right .lk{background:var(--green);color:#fff;border-color:var(--green)}
+.opt.wrong .lk{background:var(--red);color:#fff;border-color:var(--red)}
+.opt.blocked{cursor:default}
+.expl{background:#eef3e8;border-left:4px solid var(--green);border-radius:0 10px 10px 0;padding:11px 14px;margin-top:14px;font-size:14px}
+.expl b{color:var(--green)}
+.bar{height:8px;border-radius:6px;background:#ece5d6;overflow:hidden;margin:12px 0 4px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));width:0;transition:.3s}
+.progress{font-size:12px;color:var(--ink2);display:flex;justify-content:space-between}
+.timer{font-size:13px;color:var(--red);font-weight:700;background:#fdeeea;border-radius:8px;padding:4px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px;margin-top:14px}
+.grid div{aspect-ratio:1/1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;
+  background:#fff;border:1px solid var(--line);color:var(--ink2);cursor:pointer}
+.grid div.ok{background:#eef8f2;color:var(--green);border-color:var(--green)}
+.grid div.no{background:#fdeeea;color:var(--red);border-color:var(--red)}
+.grid div.cur{outline:2px solid var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px;text-align:left}
+th{background:#f0e8d6}
+.tip{font-size:12px;color:#8a7a5f;margin-top:10px}
+.big{font-size:30px;font-weight:800;color:var(--gold)}
+.warn{background:#fdeeea;border:1px solid #ecc7bd;border-radius:10px;padding:12px;font-size:13px;color:#8a3b26}
+footer{text-align:center;font-size:12px;color:#9a8b70;margin-top:26px;line-height:1.9}
+@media print{.noprint{display:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>上海小学古诗文大会 · 历年题库在线练</h1>
+    <p>适用于 3–5 年级 ｜ 全部为单选题，答完即判、即时解析</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<nav class="tabs noprint">
+  <button data-p="home" class="on">首页</button>
+  <button data-p="do">答题</button>
+  <button data-p="list">全部题目</button>
+  <button data-p="wrong">错题本</button>
+  <button data-p="about">说明</button>
+</nav>
+
+<!-- 首页 -->
+<section class="page on wrap" id="page-home"></section>
+
+<!-- 答题 -->
+<section class="page wrap" id="page-do">
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><span id="qno"></span><span class="tag" id="qtag"></span></div>
+      <div class="timer" id="timer" style="display:none"></div>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="progress"><span id="progText"></span><span id="scoreText"></span></div>
+  </div>
+  <div class="card">
+    <div class="stem" id="stem"></div>
+    <div id="opts"></div>
+    <div id="expl"></div>
+    <div class="row" style="margin-top:16px;justify-content:space-between">
+      <button class="btn ghost sm" id="prevBtn">← 上一题</button>
+      <button class="btn sm" id="nextBtn" disabled>下一题 →</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sub">答题卡（点击可跳转）</div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- 全部题目 -->
+<section class="page wrap" id="page-list">
+  <div class="card">
+    <div class="sub">按知识点筛选，点击任意题号直接开练</div>
+    <div class="chips" id="listChips"></div>
+    <div id="listBox"></div>
+  </div>
+</section>
+
+<!-- 错题本 -->
+<section class="page wrap" id="page-wrong">
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><h2>我的错题本</h2><div class="sub">数据保存在本机浏览器，不会上传</div></div>
+      <button class="btn ghost sm" id="clearWrong">清空错题</button>
+    </div>
+    <div id="wrongBox"></div>
+  </div>
+</section>
+
+<!-- 说明 -->
+<section class="page wrap" id="page-about">
+  <div class="card">
+    <h2>使用说明</h2>
+    <ol>
+      <li><b>首页</b>选择练习范围：全部题库、按知识点、或者随机组卷（可限时）。</li>
+      <li><b>答题页</b>点选项即判分，显示正确答案与解析；可随时用答题卡跳题。</li>
+      <li><b>错题本</b>自动收集答错的题目，可反复重做；清空按钮在错题本页面右上角。</li>
+      <li><b>进度</b>保存在浏览器本地（localStorage），换设备或清缓存会丢失。</li>
+    </ol>
+    <div class="sub">部署方式：本页为纯静态单文件，可直接双击打开；放到 GitHub Pages / Gitee Pages / 任意静态托管即获得公开链接。</div>
+  </div>
+  <div class="card">
+    <h2>部署到 GitHub Pages（5 步）</h2>
+    <table>
+      <tr><th>步骤</th><th>操作</th></tr>
+      <tr><td>1</td><td>注册 GitHub，新建仓库，例如 <code>guoxue-quiz</code></td></tr>
+      <tr><td>2</td><td>把本文件（index.html）上传到仓库根目录</td></tr>
+      <tr><td>3</td><td>仓库 Settings → Pages → Source 选 <code>main</code> 分支、<code>/root</code></td></tr>
+      <tr><td>4</td><td>等待 1–2 分钟，访问 <code>https://你的用户名.github.io/guoxue-quiz/</code></td></tr>
+      <tr><td>5</td><td>更新题库：替换文件后重新上传，刷新即可</td></tr>
+    </table>
+    <div class="tip">国内访问慢可改用 Gitee Pages 或腾讯云静态托管，步骤相同。</div>
+  </div>
+  <div class="card">
+    <h2>数据核对</h2>
+    <div id="aboutStats"></div>
+    <div class="tip" id="aboutNote"></div>
+  </div>
+</section>
+
+<footer>
+  题库来源：《上海小学古诗文大会历年题库（3-5）》（学生版）<br>
+  仅供学习练习使用，答案由人工整理，如与官方口径不一致以官方为准
+</footer>
+
+<script src="questions.js"></script>
+<script>
+/* ============ 数据校验 ============ */
+(function(){
+  var bad=QUESTIONS.filter(function(q){return !/[ABCD]/.test(q.answer);});
+  window.Q=QUESTIONS.filter(function(q){return /[ABCD]/.test(q.answer);});
+  window.QFAULT=bad;
+  var tags={};
+  Q.forEach(function(q){q.tags.forEach(function(t){tags[t]=(tags[t]||0)+1;});});
+  window.TAGS=tags;
+})();
+
+/* ============ 工具 ============ */
+var LS='guoxue_quiz_v1';
+var state=JSON.parse(localStorage.getItem(LS)||'{}');
+state.records=state.records||{};      // id -> {right,times,wrong}
+state.wrong=state.wrong||{};
+state.sets=state.sets||{};
+function save(){localStorage.setItem(LS,JSON.stringify(state));}
+function getRec(id){return state.records[id]||{right:0,times:0,wrong:0};}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function el(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+/* ============ 顶部统计 ============ */
+(function(){
+  var done=Object.keys(state.records).length, wrong=Object.keys(state.wrong).length;
+  el('stats').innerHTML=
+    '<div class="stat"><b>'+Q.length+'</b>道题目</div>'+
+    '<div class="stat"><b>'+Object.keys(TAGS).length+'</b>个知识点</div>'+
+    '<div class="stat"><b>'+done+'</b>题已练</div>'+
+    '<div class="stat"><b>'+wrong+'</b>题在错题本</div>';
+})();
+
+/* ============ 页面切换 ============ */
+var pages=['home','do','list','wrong','about'];
+function go(p){
+  pages.forEach(function(x){el('page-'+x).classList.toggle('on',x===p);});
+  document.querySelectorAll('nav.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.p===p);});
+  if(p==='wrong')renderWrong();
+  if(p==='list')renderList('');
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav.tabs button').forEach(function(b){b.onclick=function(){go(b.dataset.p);};});
+
+/* ============ 首页 ============ */
+function renderHome(){
+  var tags=[['全部题库',Q.length]].concat(Object.keys(TAGS).map(function(t){return [t,TAGS[t]];}));
+  var html='<div class="card"><h2>选择练习方式</h2><div class="sub">点击下方卡片开始，答错自动进错题本</div>'+
+    '<div class="row" style="margin:14px 0"><label class="tag">随机抽 <input type="number" id="rndN" value="20" min="5" max="'+Q.length+'"> 题</label>'+
+    '<label class="tag">限时 <select id="rndT"><option value="0">不限时</option><option value="5">5 分钟</option><option value="10">10 分钟</option><option value="15">15 分钟</option><option value="20">20 分钟</option><option value="30">30 分钟</option></select></label>'+
+    '<button class="btn sm" id="rndBtn">开始随机练习</button></div></div>';
+  tags.forEach(function(t){
+    html+='<div class="card" style="cursor:pointer" data-go="'+esc(t[0])+'">'+
+      '<div class="row" style="justify-content:space-between"><h2 style="font-size:16px">'+esc(t[0])+'</h2><span class="tag">'+t[1]+' 题</span></div>'+
+      '<div class="sub">点击进入该组题目</div></div>';
+  });
+  el('page-home').innerHTML=html;
+  el('page-home').querySelectorAll('[data-go]').forEach(function(c){
+    c.onclick=function(){
+      var t=c.dataset.go;
+      var pool=(t&&t!=='全部题库')?Q.filter(function(q){return q.tags.indexOf(t)>-1;}):Q.slice();
+      SESS={ids:pool.map(function(q){return q.id;}),idx:0,secs:0,limited:false,timer:null,tag:t||'全部题库'};
+      go('do');render();
+    };
+  });
+  el('rndBtn').onclick=function(){
+    var n=Math.min(Q.length,Math.max(5,+el('rndN').value||20));
+    start('__rnd',n,+el('rndT').value||0);
+  };
+}
+renderHome();
+
+/* ============ 组卷 ============ */
+var SESS={ids:[],idx:0,secs:0,timer:null,limited:false};
+function start(tag,n,secs){
+  var pool=tag?Q.filter(function(q){return q.tags.indexOf(tag)>-1;}):Q.slice();
+  if(tag==='__rnd'||n){pool=shuffle(pool.slice()).slice(0,n||pool.length);}
+  SESS={ids:pool.map(function(q){return q.id;}),idx:0,secs:secs,limited:!!secs,timer:null,tag:tag||'全部题库'};
+  if(secs){SESSION_END=null;}
+  go('do');render();
+}
+function cur(){return Q.filter(function(q){return q.id===SESS.ids[SESS.idx];})[0];}
+function tick(){
+  SESS.secs--;
+  var m=Math.floor(SESS.secs/60),s=SESS.secs%60;
+  el('timer').textContent='剩余 '+m+':'+(s<10?'0':'')+s;
+  if(SESS.secs<=0){clearInterval(SESS.timer);finish('时间到！');}
+}
+function render(){
+  var q=cur(),rec=getRec(q.id);
+  el('qno').textContent=(SESS.tag!=='全部题库'?'【'+SESS.tag+'】':'')+' 第 '+(SESS.idx+1)+' / '+SESS.ids.length+' 题  ·  原题号 '+q.id;
+  el('qtag').textContent=q.tags.join(' · ') || '综合';
+  el('stem').innerHTML=esc(q.stem);
+  var my=state.wrong[q.id]||'';
+  var html='';
+  q.options.forEach(function(o,i){
+    var L=String.fromCharCode(65+i), cls='';
+    if(my){cls=(L===q.answer)?'right':(L===my?'wrong':'');}
+    html+='<div class="opt '+cls+(my?' blocked':'')+'" data-i="'+i+'"><span class="lk">'+(my?'·':L)+'</span><span>'+esc(o)+'</span></div>';
+  });
+  el('opts').innerHTML=html;
+  el('expl').innerHTML=answered?'<div class="expl"><b>'+(my?'回答错误，正确答案：'+q.answer:'回答正确 ✓')+'</b>　'+esc(q.expl||'（题库未附解析，可对照原书）')+'</div>':'';
+  if(!my){
+    el('opts').querySelectorAll('.opt').forEach(function(o){
+      o.onclick=function(){choose(+o.dataset.i);};
+    });
+  }
+  var answered=(state.records[q.id]&&state.records[q.id].times>0)||!!state.wrong[q.id];
+  el('prevBtn').disabled=(SESS.idx===0);
+  el('nextBtn').disabled=!answered;
+  el('nextBtn').textContent=(SESS.idx===SESS.ids.length-1)?'查看结果 →':'下一题 →';
+  var p=(SESS.idx+1)/SESS.ids.length*100;
+  el('bar').style.width=p+'%';
+  var ok=SESS.ids.slice(0,SESS.idx+1).filter(function(i){return state.wrong[i];}).length;
+  el('progText').textContent='进度 '+Math.round(p)+'%';
+  el('scoreText').textContent='本卷已答 '+(SESS.idx+1)+' 题，错 '+ok+' 题';
+  el('timer').style.display=SESS.limited?'block':'none';
+  renderGrid();
+  if(SESS.limited && !SESS.timer){SESS.timer=setInterval(tick,1000);tick();}
+  window.scrollTo(0,0);
+}
+function renderGrid(){
+  var html='';
+  SESS.ids.forEach(function(i,k){
+    var cls='';
+    if(state.wrong[i])cls='no'; else if(state.records[i]&&state.records[i].times)cls='ok';
+    if(k===SESS.idx)cls+=' cur';
+    html+='<div class="'+cls.trim()+'" data-k="'+k+'">'+(k+1)+'</div>';
+  });
+  el('grid').innerHTML=html;
+  el('grid').querySelectorAll('div').forEach(function(d){d.onclick=function(){SESS.idx=+d.dataset.k;render();};});
+}
+function choose(i){
+  var q=cur(),L=String.fromCharCode(65+i);
+  if(state.wrong[q.id])return;
+  if(!state.records[q.id])state.records[q.id]={right:0,times:0,wrong:0};
+  var rec=state.records[q.id]; rec.times++;
+  if(L===q.answer){rec.right++; delete state.wrong[q.id];}
+  else {rec.wrong++; state.wrong[q.id]=L;}
+  save();render();
+}
+el('prevBtn').onclick=function(){if(SESS.idx>0){SESS.idx--;render();}};
+el('nextBtn').onclick=function(){
+  if(SESS.idx<SESS.ids.length-1){SESS.idx++;render();}
+  else {if(SESS.timer)clearInterval(SESS.timer);finish('本卷已完成！');}
+};
+function finish(msg){
+  var right=SESS.ids.filter(function(i){return !state.wrong[i];}).length;
+  var wrong=SESS.ids.length-right;
+  el('page-do').innerHTML='<div class="card" style="text-align:center;padding:34px 18px">'+
+    '<div class="sub">'+esc(msg)+'</div><div class="big">'+right+' / '+SESS.ids.length+'</div>'+
+    '<div class="sub">答对 '+right+' 题，答错 '+wrong+' 题，正确率 '+Math.round(right/SESS.ids.length*100)+'%</div>'+
+    '<div class="row" style="justify-content:center;margin-top:18px">'+
+    '<button class="btn ghost sm" onclick="go(\'wrong\')">去错题本重做</button>'+
+    '<button class="btn sm" onclick="renderHome();go(\'home\')">再练一组</button></div></div>';
+}
+
+/* ============ 全部题目 ============ */
+function renderList(tag){
+  var pool=(tag&&tag!=='全部题库')?Q.filter(function(q){return q.tags.indexOf(tag)>-1;}):Q.slice();
+  var html='<div class="chips"><span class="chip'+(!tag?' on':'')+'" data-t="">全部 '+Q.length+'</span>';
+  Object.keys(TAGS).forEach(function(t){
+    html+='<span class="chip'+(t===tag?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+' '+TAGS[t]+'</span>';
+  });
+  html+='</div><div class="grid">';
+  pool.forEach(function(q){
+    var r=getRec(q.id), cls=r.times?'ok':'';
+    html+='<div class="'+cls+'" data-id="'+q.id+'" title="第'+q.id+'题 · 错'+r.wrong+'次">'+q.id+'</div>';
+  });
+  html+='</div>';
+  el('listBox').innerHTML=html;
+  el('listBox').querySelectorAll('[data-id]').forEach(function(d){d.onclick=function(){
+    var arr=pool.map(function(q){return q.id;});
+    SESS={ids:arr,idx:arr.indexOf(+d.dataset.id),secs:0,limited:false,timer:null,tag:'自选'};
+    go('do');render();
+  };});
+  el('page-list').querySelectorAll('[data-t]').forEach(function(c){c.onclick=function(){renderList(c.dataset.t);};});
+}
+
+/* ============ 错题本 ============ */
+function renderWrong(){
+  var ids=Object.keys(state.wrong).map(Number);
+  if(!ids.length){el('wrongBox').innerHTML='<div class="tip">还没有错题，继续刷题吧 🌿</div>';return;}
+  var html='<div class="sub">共 '+ids.length+' 题，点击「重做」只练错题</div>'+
+    '<div class="row" style="margin:12px 0"><button class="btn sm" id="doWrong">只重做错题</button>'+
+    '<button class="btn ghost sm" id="shuffleWrong">随机重做错题</button></div>';
+  ids.forEach(function(i){
+    var q=Q.filter(function(x){return x.id===i;})[0],r=getRec(i);
+    if(!q)return;
+    html+='<div class="card"><div class="stem" style="font-size:16px">'+q.id+'. '+esc(q.stem)+'</div>'+
+      '<div class="tag">你的答案 '+state.wrong[i]+'　正确答案 '+q.answer+'　累计错 '+r.wrong+' 次</div>'+
+      '<div class="tip">'+esc(q.expl||'题库未附解析')+'</div></div>';
+  });
+  el('wrongBox').innerHTML=html;
+  el('doWrong').onclick=function(){SESS={ids:ids,idx:0,secs:0,limited:false,timer:null,tag:'错题重做'};go('do');render();};
+  el('shuffleWrong').onclick=function(){SESS={ids:shuffle(ids.slice()),idx:0,secs:0,limited:false,timer:null,tag:'错题重做'};go('do');render();};
+}
+el('clearWrong').onclick=function(){
+  if(!confirm('确定清空错题本？此操作不可撤销。'))return;
+  state.wrong={};save();renderWrong();renderHome();
+};
+
+/* ============ 说明页统计 ============ */
+(function(){
+  var t='标准单选题 <b>'+Q.length+'</b> 道';
+  if(QFAULT.length){t+='；暂缺答案 <b>'+QFAULT.length+'</b> 道（编号：'+QFAULT.map(function(q){return q.id;}).join('、')+'），未纳入练习';}
+  el('aboutStats').innerHTML='<div class="sub">'+t+'</div>'+
+    '<table><tr><th>知识点</th><th>题量</th></tr>'+Object.keys(TAGS).map(function(k){
+      return '<tr><td>'+esc(k)+'</td><td>'+TAGS[k]+'</td></tr>';}).join('')+'</table>';
+  el('aboutNote').innerHTML='答案由人工对照原书整理，个别题目（如 551、905 为双选，906 为多选）已单独处理；如发现答案分歧，请以官方公布为准。';
+})();
+</script>
+</body>
+</html>
